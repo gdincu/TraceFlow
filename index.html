@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Komoot GPX Visualizer</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+    <div id="controls">
+    <div class="control-header">
+        <span id="time-display">00:00:00</span>
+        <div class="speed-selector">
+            <select id="speed-select" onchange="playback.updateSpeed(this.value)">
+                <option value="10">10x</option>
+                <option value="30" selected>30x</option>
+                <option value="50">50x</option>
+                <option value="100">100x</option>
+            </select>
+        </div>
+    </div>
+
+    <input type="range" id="time-slider" min="0" max="100" value="0">
+
+    <div class="btn-group">
+        <button id="play-pause-btn" title="Play/Pause" onclick="playback.toggle()">
+            <i class="fas fa-play"></i>
+        </button>
+        <div class="divider"></div>
+        <button class="rec-btn" title="Start Recording" onclick="recorder.start()">
+            <i class="fas fa-circle"></i> <span>REC</span>
+        </button>
+        <button title="Stop & Save" onclick="recorder.stop()">
+            <i class="fas fa-save"></i>
+        </button>
+    </div>
+</div>
+
+    <div id="map"></div>
+    <div id="chart-container">
+        <canvas id="elevationChart"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>

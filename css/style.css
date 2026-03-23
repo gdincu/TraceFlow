@@ -1,0 +1,154 @@
+/* --- Global Structure --- */
+body, html { 
+    margin: 0; 
+    padding: 0; 
+    height: 100%; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    overflow: hidden; 
+    background: #f0f0f0; 
+}
+
+#map { 
+    height: 85vh; 
+    width: 100%; 
+}
+
+#chart-container { 
+    height: 15vh; 
+    width: 100%; 
+    background: white; 
+    padding: 5px 15px; 
+    box-sizing: border-box; 
+    border-top: 1px solid #ddd; 
+    display: flex;
+    align-items: center;
+}
+
+/* --- Refined Controls Section --- */
+#controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    width: 260px;
+    border-top: 4px solid #ff4400; /* Matching ride color */
+}
+
+.control-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+#time-display {
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-weight: bold;
+    font-size: 18px;
+    color: #222;
+}
+
+/* --- Custom Range Slider --- */
+#time-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    outline: none;
+    margin: 10px 0 15px 0;
+    cursor: pointer;
+}
+
+#time-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #ff4400;
+    border: 2px solid white;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    transition: transform 0.1s ease;
+}
+
+#time-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* --- Button Styling --- */
+.btn-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+button {
+    background: #f0f0f0;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #444;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+button:hover {
+    background: #e5e5e5;
+    color: #000;
+}
+
+#play-pause-btn {
+    background: #ff4400;
+    color: white;
+    flex: 2; /* Primary action is wider */
+}
+
+#play-pause-btn:hover {
+    background: #e63e00;
+}
+
+/* --- Speed & Rec Accents --- */
+select {
+    border: none;
+    background: #f0f0f0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+}
+
+.divider {
+    width: 1px;
+    height: 18px;
+    background: #ddd;
+    margin: 0 2px;
+}
+
+.rec-btn i {
+    color: #ff0000;
+    margin-right: 4px;
+    font-size: 8px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* --- Map Marker Styling --- */
+.bike-marker { 
+    filter: drop-shadow(0px 3px 4px rgba(0,0,0,0.4)); 
+}
