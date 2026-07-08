@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TransitFlow</title>
-    
+    <title>TraceFlow</title>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="css/style.css">
@@ -12,59 +12,65 @@
 <body>
 
 <div id="controls">
-    <div class="time-container">
-        <label for="time-input"><strong>Time: </strong></label>
-        <input type="time" id="time-input" step="1">
-    </div>
+    <h1 id="track-name">TraceFlow</h1>
 
-    <input type="range" id="time-slider" min="0" max="86399">
-    
-    <div class="slider-labels">
-        <span>00:00</span>
-        <span>06:00</span>
-        <span>12:00</span>
-        <span>18:00</span>
-        <span>23:59</span>
-    </div>
+    <div id="playback-section">
+        <input type="range" id="time-slider" min="0" max="0" value="0" aria-label="Playback position">
 
-    <div class="btn-group">
-        <button id="play-pause-btn" onclick="autoPlay.toggle()" title="Play/Pause">
-            <i class="fas fa-pause"></i>
-        </button>
-        <select id="speed-selector" onchange="autoPlay.setSpeed(this.value)" title="Playback Speed">
-            <option value="1">1x</option>
-            <option value="10">10x</option>
-            <option value="30" selected>30x</option>
-            <option value="60">60x</option>
-            <option value="120">120x</option>
-        </select>
-    </div>
-    
-    <div id="search-container">
-        <div class="search-header" onclick="toggleSearch()">
-            <span>🔍 SEARCH</span>
-            <i id="search-chevron" class="fas fa-chevron-down"></i>
+        <div class="slider-labels">
+            <span id="elapsed-time">00:00:00</span>
+            <span id="total-time">--:--:--</span>
         </div>
 
-        <div id="search-content">
-            <input type="text" id="stop-search-input" placeholder="Stop name or ID">
-            
-            <div class="search-params">
-                <input type="time" id="search-time-input">
-                <input type="number" id="search-window" value="10" min="1" max="60" title="Window (mins)">
-            </div>
-            
-            <div class="search-actions">
-                <button class="btn-find" onclick="searchBusAtStop()">Find</button>
-                <button class="btn-clear" onclick="clearSearch()">Clear</button>
-            </div>
-            
-            <div id="search-results"></div>
+        <div class="btn-group">
+            <button id="play-pause-btn" title="Play/Pause (Space)" aria-label="Play or pause">
+                <i class="fas fa-play"></i>
+            </button>
+            <select id="speed-selector" title="Playback Speed">
+                <option value="30" selected>30x</option>
+                <option value="60">60x</option>
+                <option value="120">120x</option>
+            </select>
+            <button id="load-btn" title="Open GPX file (or drag &amp; drop one anywhere)" aria-label="Open GPX file">
+                <i class="fas fa-folder-open"></i>
+            </button>
+            <input type="file" id="file-input" accept=".gpx" hidden>
         </div>
+    </div>
+
+    <div id="marker-section">
+        <label style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #888; display: block; margin-bottom: 6px;">Marker</label>
+        <div id="icon-row" role="group" aria-label="Marker icon"></div>
+        <input type="file" id="icon-file-input" accept="image/*" hidden>
+    </div>
+
+    <div id="stats-grid">
+        <div class="stat">
+            <span class="stat-label">Distance</span>
+            <span class="stat-value"><span id="stat-distance">0.0</span> / <span id="stat-total-distance">0.0</span> km</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Speed</span>
+            <span class="stat-value"><span id="stat-speed">0.0</span> km/h</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Elevation</span>
+            <span class="stat-value"><span id="stat-elevation">0</span> m</span>
+        </div>
+        <div class="stat">
+            <span class="stat-label">Elevation gain</span>
+            <span class="stat-value"><span id="stat-gain">0</span> m</span>
+        </div>
+    </div>
+
+    <div id="elevation-profile">
+        <svg id="elevation-svg" viewBox="0 0 400 90" preserveAspectRatio="none"></svg>
     </div>
 </div>
 
 <div id="map"></div>
+
+<div id="drop-overlay"><span>Drop GPX file to load</span></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script src="js/script.js"></script>
@@ -73,8 +79,8 @@
     // Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js')
-                .then(() => console.log('TransitFlow Cache Active!'))
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('TraceFlow Cache Active!'))
                 .catch(err => console.error('Cache failed:', err));
         });
     }

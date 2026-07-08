@@ -1,1 +1,58 @@
-const CACHE_NAME="transitflow",BASE_ASSETS=["/","/index.html","/css/style.css","/js/script.js"],DATA_ASSETS=["/data/gtfs_shapes.geojson","/data/route_colors.json","/data/bus_schedules.json","/data/gtfs_stops.geojson"],ICON_ASSETS=["/assets/icons/bus-stop.png","/assets/icons/route_icon_1.png","/assets/icons/route_icon_10.png","/assets/icons/route_icon_11.png","/assets/icons/route_icon_12.png","/assets/icons/route_icon_13.png","/assets/icons/route_icon_17.png","/assets/icons/route_icon_20.png","/assets/icons/route_icon_23b.png","/assets/icons/route_icon_24.png","/assets/icons/route_icon_25.png","/assets/icons/route_icon_29b.png","/assets/icons/route_icon_2b.png","/assets/icons/route_icon_3b.png","/assets/icons/route_icon_4.png","/assets/icons/route_icon_5b.png","/assets/icons/route_icon_6.png","/assets/icons/route_icon_9.png","/assets/icons/route_icon_e1r.png","/assets/icons/route_icon_e1t.png","/assets/icons/route_icon_t100.png","/assets/icons/route_icon_t101.png","/assets/icons/route_icon_t102.png"],ASSETS_TO_CACHE=[...BASE_ASSETS,...DATA_ASSETS,...ICON_ASSETS];self.addEventListener("install",s=>{self.skipWaiting(),s.waitUntil(caches.open(CACHE_NAME).then(s=>(console.log("TransitFlow: Pre-caching all assets"),s.addAll(ASSETS_TO_CACHE))))}),self.addEventListener("activate",s=>{s.waitUntil(caches.keys().then(s=>Promise.all(s.map(s=>{if(s!==CACHE_NAME)return console.log("TransitFlow: Clearing old cache",s),caches.delete(s)}))).then(()=>self.clients.claim()))}),self.addEventListener("fetch",s=>{s.respondWith(caches.match(s.request).then(n=>n||fetch(s.request)))});
+const CACHE_NAME = "traceflow-v2";
+// Relative paths so the app also works when hosted under a sub-path.
+const ASSETS_TO_CACHE = [
+    "./",
+    "./index.html",
+    "./css/style.css",
+    "./js/script.js",
+    "./data/ride.gpx",
+    "./assets/bike.png",
+    "./favicon.ico",
+];
+
+self.addEventListener("install", event => {
+    self.skipWaiting();
+    event.waitUntil(
+        caches.open(CACHE_NAME).then(cache => {
+            console.log("TraceFlow: Pre-caching app shell");
+            return cache.addAll(ASSETS_TO_CACHE);
+        })
+    );
+});
+
+self.addEventListener("activate", event => {
+    event.waitUntil(
+        caches.keys()
+            .then(keys => Promise.all(keys.map(key => {
+                if (key !== CACHE_NAME) {
+                    console.log("TraceFlow: Clearing old cache", key);
+                    return caches.delete(key);
+                }
+            })))
+            .then(() => self.clients.claim())
+    );
+});
+
+self.addEventListener("fetch", event => {
+    if (event.request.method !== "GET") return;
+
+    const sameOrigin = new URL(event.request.url).origin === self.location.origin;
+    if (sameOrigin) {
+        // Network-first keeps our own assets fresh; the cache is the offline fallback.
+        event.respondWith(
+            fetch(event.request)
+                .then(res => {
+                    if (res.ok) {
+                        const copy = res.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+                    }
+                    return res;
+                })
+                .catch(() => caches.match(event.request))
+        );
+    } else {
+        event.respondWith(
+            caches.match(event.request).then(cached => cached || fetch(event.request))
+        );
+    }
+});
