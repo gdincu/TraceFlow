@@ -2,7 +2,7 @@
 
 **TraceFlow** is a lightweight, client-side tool for visualizing GPX files.
 
-<img width="1409" height="930" alt="image" src="https://github.com/user-attachments/assets/95834ff9-e04c-4d83-877a-ae64f7cd4415" />
+<img width="917" height="424" alt="image" src="https://github.com/user-attachments/assets/c9c845be-625c-4734-8521-bfbff4506e26" />
 
 ## Features
 
