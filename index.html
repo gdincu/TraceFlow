@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TraceFlow</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <link rel="stylesheet" href="css/style.css">
@@ -12,10 +11,15 @@
 <body>
 
 <div id="controls">
-    <h1 id="track-name">TraceFlow</h1>
+    <div class="control-header">
+        <h1 id="track-name">TraceFlow</h1>
+        <button id="toggle-controls-btn" title="Toggle Controls" aria-label="Toggle control panel">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    </div>
 
     <div id="playback-section">
-        <input type="range" id="time-slider" min="0" max="0" value="0" aria-label="Playback position">
+        <input type="range" id="time-slider" aria-label="Playback position">
 
         <div class="slider-labels">
             <span id="elapsed-time">00:00:00</span>
@@ -39,7 +43,7 @@
     </div>
 
     <div id="marker-section">
-        <label style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #888; display: block; margin-bottom: 6px;">Marker</label>
+        <label class="section-title">Marker</label>
         <div id="icon-row" role="group" aria-label="Marker icon"></div>
         <input type="file" id="icon-file-input" accept="image/*" hidden>
     </div>
@@ -51,7 +55,7 @@
         </div>
         <div class="stat">
             <span class="stat-label">Speed</span>
-            <span class="stat-value"><span id="stat-speed">0.0</span> km/h</span>
+            <span class="stat-value"><span id="stat-speed">0</span> km/h</span>
         </div>
         <div class="stat">
             <span class="stat-label">Elevation</span>
@@ -66,17 +70,18 @@
     <div id="elevation-profile">
         <svg id="elevation-svg" viewBox="0 0 400 90" preserveAspectRatio="none"></svg>
     </div>
+    
+    <div id="speed-profile">
+        <svg id="speed-svg" viewBox="0 0 400 90" preserveAspectRatio="none"></svg>
+    </div>
 </div>
 
 <div id="map"></div>
-
 <div id="drop-overlay"><span>Drop GPX file to load</span></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
 <script src="js/script.js"></script>
-
 <script>
-    // Service Worker Registration
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
