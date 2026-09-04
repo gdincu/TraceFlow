@@ -34,4 +34,4 @@ python -m http.server 8000
 # or: npx serve
 ```
 
-Map tiles © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors.
+Map tiles © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors. 
